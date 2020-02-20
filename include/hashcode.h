@@ -7,6 +7,7 @@ struct book {
 };
 
 struct lib {
+    int id;
     bool is_signed_up;
     int nb_books;
     int signup_duration;
