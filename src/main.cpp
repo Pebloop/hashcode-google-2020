@@ -67,14 +67,23 @@ void write_solution(char *outfile)
     output_file.open(outfile);
     output_file << d.nb_libs << endl;
     for (int i = 0; i < d.nb_libs; i++) {
+        vector <int> choice;
         max_book = 0;
         for (int day = d.libs[i].signup_duration; day < d.nb_days; day++) {
             max_book += d.libs[i].books_per_day;
         }
         max_book = (d.libs[i].nb_books < max_book) ? d.libs[i].nb_books : max_book;
-        output_file << d.libs[i].id << " " << d.libs[i].nb_books << endl;
-        for (int y = 0; y < d.libs[i].nb_books; y++) {
-            output_file << d.libs[i].books[y] << " ";
+        for (int test = 0; test < d.libs[i].nb_books; test++) {
+            bool found = (find(scanned.begin(), scanned.end(), d.libs[i].books[test]) != scanned.end());
+            if (!found)
+                choice.push_back(d.libs[i].books[test]);
+        }
+        if (choice.size() < max_book)
+            max_book = choice.size();
+        output_file << d.libs[i].id << " " << max_book << endl;
+        for (int y = 0; y < max_book; y++) {
+            output_file << choice[y] << " ";
+            scanned.push_back(choice[y]);
         }
         output_file << endl;
     }
