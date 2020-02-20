@@ -23,11 +23,13 @@ struct data get_data(char *filename)
     input_file >> nb_libs;
     input_file >> nb_days;
     for (int i = 0; i < nb_books ; i++) {
+        b = {0};
         input_file >> b.score;
         b.id = i;
         books.push_back(b);
     }
     for (int i = 0; i < nb_libs; i++) {
+        l = {0};
         input_file >> l.nb_books;
         input_file >> l.signup_duration;
         input_file >> l.books_per_day;
@@ -49,10 +51,10 @@ struct data get_data(char *filename)
     return d;
 }
 
-void write_solution(struct data d)
+void write_solution(struct data d, char *outfile)
 {
     ofstream output_file;
-    output_file.open("output.txt");
+    output_file.open(outfile);
     output_file << d.nb_libs << endl;
     for (int i = 0; i < d.nb_libs; i++) {
         output_file << i << " " << d.libs[i].nb_books << endl;
@@ -67,6 +69,6 @@ void write_solution(struct data d)
 int main(int argc, char *argv[])
 {
     struct data d = get_data(argv[1]);
-    write_solution(d);
+    write_solution(d, argv[2]);
     return (0);
 }
