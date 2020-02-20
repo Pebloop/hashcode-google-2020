@@ -5,8 +5,9 @@
 
 using namespace std;
 
-int main(int argc, char *argv[])
+struct data get_data(char *filename)
 {
+    struct data d = {0};
     int nb_books = 0;
     int nb_libs = 0;
     int nb_days = 0;
@@ -17,7 +18,7 @@ int main(int argc, char *argv[])
     int bookId = 0;
 
     ifstream input_file;
-    input_file.open(argv[1]);
+    input_file.open(filename);
     input_file >> nb_books;
     input_file >> nb_libs;
     input_file >> nb_days;
@@ -35,8 +36,37 @@ int main(int argc, char *argv[])
             l.books.push_back(bookId);
         }
         l.id = i;
+        libs.push_back(l);
     }
     input_file.close();
-    cout << books[0].score << endl;
+
+    d.nb_books = nb_books;
+    d.nb_libs = nb_libs;
+    d.nb_days = nb_days;
+    d.books = books;
+    d.libs = libs;
+
+    return d;
+}
+
+void write_solution(struct data d)
+{
+    ofstream output_file;
+    output_file.open("output.txt");
+    output_file << d.nb_libs << endl;
+    for (int i = 0; i < d.nb_libs; i++) {
+        output_file << i << " " << d.libs[i].nb_books << endl;
+        for (int y = 0; y < d.libs[i].nb_books; y++) {
+            output_file << d.libs[i].books[y] << " ";
+        }
+        output_file << endl;
+    }
+    output_file.close();
+}
+
+int main(int argc, char *argv[])
+{
+    struct data d = get_data(argv[1]);
+    write_solution(d);
     return (0);
 }
