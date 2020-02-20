@@ -6,9 +6,11 @@
 
 using namespace std;
 
+struct data d = {0};
+
 struct data get_data(char *filename)
 {
-    struct data d = {0};
+    struct data gd = {0};
     int nb_books = 0;
     int nb_libs = 0;
     int nb_days = 0;
@@ -43,28 +45,33 @@ struct data get_data(char *filename)
     }
     input_file.close();
 
-    d.nb_books = nb_books;
-    d.nb_libs = nb_libs;
-    d.nb_days = nb_days;
-    d.books = books;
-    d.libs = libs;
+    gd.nb_books = nb_books;
+    gd.nb_libs = nb_libs;
+    gd.nb_days = nb_days;
+    gd.books = books;
+    gd.libs = libs;
 
-    return d;
+    return gd;
 }
 
-void write_solution(struct data d, char *outfile)
+void write_solution(char *outfile)
 {
     vector <int> scanned;
     int max_book = 0;
     
     sort(d.libs.begin(), d.libs.end(), [](const struct lib& a, const struct lib& b){
-        return a.signup_duration < b.signup_duration || (a.signup_duration <= b.signup_duration && a.books_per_day > b.books_per_day);
+
+        return (d.nb_days - a.signup_duration) * a.books_per_day > (d.nb_days - b.signup_duration) * b.books_per_day;
     });
     ofstream output_file;
     output_file.open(outfile);
     output_file << d.nb_libs << endl;
     for (int i = 0; i < d.nb_libs; i++) {
-        //max_book = d.libs[i].nb_books - d.libs
+        max_book = 0;
+        for (int day = d.libs[i].signup_duration; day < d.nb_days; day++) {
+            max_book += d.libs[i].books_per_day;
+        }
+        max_book = (d.libs[i].nb_books < max_book) ? d.libs[i].nb_books : max_book;
         output_file << d.libs[i].id << " " << d.libs[i].nb_books << endl;
         for (int y = 0; y < d.libs[i].nb_books; y++) {
             output_file << d.libs[i].books[y] << " ";
@@ -76,7 +83,7 @@ void write_solution(struct data d, char *outfile)
 
 int main(int argc, char *argv[])
 {
-    struct data d = get_data(argv[1]);
-    write_solution(d, argv[2]);
+    d = get_data(argv[1]);
+    write_solution(argv[2]);
     return (0);
 }
