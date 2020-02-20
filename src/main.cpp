@@ -1,5 +1,6 @@
 #include "hashcode.h"
 #include <iostream>
+#include<algorithm>
 #include <fstream>
 #include <vector>
 
@@ -53,11 +54,16 @@ struct data get_data(char *filename)
 
 void write_solution(struct data d, char *outfile)
 {
+    vector <int> scanned;
+    
+    sort(d.libs.begin(), d.libs.end(), [](const struct lib& a, const struct lib& b){
+        return a.signup_duration < b.signup_duration;
+    });
     ofstream output_file;
     output_file.open(outfile);
     output_file << d.nb_libs << endl;
     for (int i = 0; i < d.nb_libs; i++) {
-        output_file << i << " " << d.libs[i].nb_books << endl;
+        output_file << d.libs[i].id << " " << d.libs[i].nb_books << endl;
         for (int y = 0; y < d.libs[i].nb_books; y++) {
             output_file << d.libs[i].books[y] << " ";
         }
