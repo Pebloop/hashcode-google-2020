@@ -7,10 +7,6 @@
 
 CXX        =    g++
 
-SRC     =	src/hashcode.cpp							\
-
-OBJ     =	$(SRC:.cpp=.o) 			\
-
 MAIN_SRC    =    src/main.cpp			\
 
 MAIN_OBJ    =    $(MAIN_SRC:.cpp=.o)	\
@@ -25,8 +21,7 @@ $(TARGET): build
 
 build: $(OBJ) $(MAIN_OBJ) ## Compile the project
 	@printf "\e[1;3;5;32m▀▄▀▄▀▄ Finished compiling sources ▄▀▄▀▄▀\e[0m\n"
-	@$(CXX) $(CXXFLAGS) $(OBJ) $(MAIN_OBJ) -o $(TARGET)
-	@printf "[\e[1;34m-Link Obj-\e[0m] % 43s\n" $(OBJ) | tr ' ' '.'
+	@$(CXX) $(CXXFLAGS) $(MAIN_OBJ) -o $(TARGET)
 	@printf "[\e[1;34m-Link Main-\e[0m] % 43s\n" $(MAIN_OBJ) | tr ' ' '.'
 	@printf "\e[1;3;5;32m▀▄▀▄▀▄ Link all object ▄▀▄▀▄▀\e[0m\n"
 
@@ -35,7 +30,7 @@ build: $(OBJ) $(MAIN_OBJ) ## Compile the project
 	@printf "[\e[1;34m-Compiled-\e[0m] % 41s\n" $@ | tr ' ' '.'
 
 clean: ## Clean the useless file
-	@rm -f $(OBJ) $(MAIN_OBJ) $(COVERAGE)
+	@rm -f $(MAIN_OBJ)
 
 fclean: clean ## Clean the project
 	@rm -f $(TARGET)
