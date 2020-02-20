@@ -14,7 +14,7 @@ struct lib {
     int nb_books;
     int signup_duration;
     int books_per_day;
-    std::vector <struct book> books;
+    std::vector <int> books;
 };
 
 struct data {
